@@ -6,11 +6,14 @@ import { useGameEngine } from '@/lib/gameEngine';
 import GameBoard from '@/components/game/GameBoard';
 import GameHud from '@/components/game/GameHud';
 import GameOverModal from '@/components/game/GameOverModal';
+import LeaderboardPanel from '@/components/game/LeaderboardPanel';
 import PauseOverlay from '@/components/game/PauseOverlay';
 import ScoreGuide from '@/components/game/ScoreGuide';
 import SettingsPanel from '@/components/game/SettingsPanel';
+import { saveLeaderboardEntry } from '@/lib/leaderboard';
 import ArcadeButton from '@/components/ui/ArcadeButton';
 import { playBomb, playClick, playCombo, playGameOver, playLevelClear, playWarning } from '@/lib/sound';
+import type { LeaderboardOutcome } from '@/types/game';
 
 export default function GamePage() {
   const engine = useGameEngine();
@@ -21,6 +24,7 @@ export default function GamePage() {
   const isPaused = engine.state.status === 'paused';
   const prevTimeRef = useRef(engine.state.timeLeft);
   const hasStartedRef = useRef(false);
+  const recordedResultRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!engine.state.soundOn) return;
@@ -46,6 +50,27 @@ export default function GamePage() {
     }
   }, [status, initLevel]);
 
+  useEffect(() => {
+    if (status === 'playing') {
+      recordedResultRef.current = null;
+      return;
+    }
+
+    if (status !== 'won' && status !== 'lost' && status !== 'game-over') return;
+    if (engine.state.score <= 0) return;
+
+    const recordKey = `${status}-${engine.state.currentLevel}-${engine.state.score}-${engine.state.timeLeft}`;
+    if (recordedResultRef.current === recordKey) return;
+
+    recordedResultRef.current = recordKey;
+    saveLeaderboardEntry({
+      score: engine.state.score,
+      level: engine.state.currentLevel,
+      outcome: status as LeaderboardOutcome,
+      timeLeft: engine.state.timeLeft,
+    });
+  }, [engine.state.currentLevel, engine.state.score, engine.state.timeLeft, status]);
+
   const statusLabel = useMemo(() => {
     if (engine.state.status === 'won') return '關卡達成！';
     if (engine.state.status === 'lost') return '遊戲結束';
@@ -66,7 +91,7 @@ export default function GamePage() {
   };
 
   return (
-    <main className="game-screen relative min-h-screen overflow-hidden text-white">
+    <main className="game-screen relative min-h-screen overflow-x-hidden text-white">
       <div className="game-layout relative z-10 mx-auto grid w-full max-w-7xl gap-4 px-3 py-4 sm:px-5 lg:py-6">
         <section className="game-arena">
           <div className="game-topbar">
@@ -118,6 +143,7 @@ export default function GamePage() {
             <p className="side-title">分數圖鑑</p>
             <ScoreGuide compact />
           </div>
+          <LeaderboardPanel compact />
           <div className="game-side-panel">
             <p className="side-title">遊戲說明</p>
             <p className="side-copy">

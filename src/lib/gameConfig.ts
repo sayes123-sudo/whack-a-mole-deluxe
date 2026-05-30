@@ -3,6 +3,7 @@ import type { LevelConfig } from "@/types/game";
 export const INITIAL_LIVES = 3;
 export const STORAGE_KEYS = {
   highScore: "whack-a-mole-deluxe-high-score",
+  leaderboard: "whack-a-mole-deluxe-leaderboard",
   settings: "whack-a-mole-deluxe-settings",
 };
 

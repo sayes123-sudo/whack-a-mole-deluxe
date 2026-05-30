@@ -29,6 +29,17 @@ export interface GameSettings {
   mute: boolean;
 }
 
+export type LeaderboardOutcome = "won" | "lost" | "game-over";
+
+export interface LeaderboardEntry {
+  id: string;
+  score: number;
+  level: number;
+  outcome: LeaderboardOutcome;
+  timeLeft: number;
+  createdAt: string;
+}
+
 export interface GameState {
   status: "menu" | "playing" | "paused" | "won" | "lost" | "game-over";
   score: number;

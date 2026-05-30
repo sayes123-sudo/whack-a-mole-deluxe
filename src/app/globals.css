@@ -243,6 +243,224 @@ a {
   line-height: 1.7;
 }
 
+.leaderboard,
+.how-hero,
+.how-card {
+  border: 1px solid rgba(147, 216, 255, 0.26);
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(135deg, rgba(26, 52, 84, 0.82), rgba(28, 17, 58, 0.78)),
+    radial-gradient(circle at top right, rgba(255, 200, 87, 0.12), transparent 30%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+}
+
+.leaderboard {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.leaderboard-compact {
+  padding: 1rem;
+}
+
+.leaderboard-head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leaderboard-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.2em;
+}
+
+.leaderboard h2 {
+  margin: 0.2rem 0 0;
+  color: white;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 950;
+}
+
+.leaderboard-compact h2 {
+  font-size: 1.08rem;
+}
+
+.leaderboard-clear {
+  flex: 0 0 auto;
+  min-height: 2.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #eef7ff;
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 0.55rem 0.75rem;
+}
+
+.leaderboard-clear:hover {
+  background: rgba(255, 102, 204, 0.18);
+}
+
+.leaderboard-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 2.35rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05)),
+    radial-gradient(circle at top right, rgba(51, 255, 255, 0.1), transparent 38%);
+  padding: 0.75rem;
+}
+
+.leaderboard-rank {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #33ffff, #ffc857 48%, #ff66cc);
+  color: #050816;
+  font-weight: 950;
+}
+
+.leaderboard-main {
+  min-width: 0;
+}
+
+.leaderboard-line {
+  display: flex;
+  gap: 0.55rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.leaderboard-line strong {
+  color: #ffd76e;
+  font-size: 1.2rem;
+  font-weight: 950;
+}
+
+.leaderboard-line span,
+.leaderboard-main p,
+.leaderboard-empty span {
+  color: rgba(238, 247, 255, 0.72);
+}
+
+.leaderboard-line span {
+  flex: 0 0 auto;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.leaderboard-main p {
+  margin: 0.2rem 0 0;
+  overflow: hidden;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-empty {
+  display: grid;
+  gap: 0.3rem;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1rem;
+}
+
+.leaderboard-empty strong {
+  color: #fff;
+  font-weight: 950;
+}
+
+.how-page {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255, 102, 204, 0.2), transparent 28%),
+    radial-gradient(circle at 80% 14%, rgba(51, 255, 255, 0.16), transparent 30%),
+    linear-gradient(135deg, #101a32 0%, #201243 45%, #071a2c 100%);
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.how-shell {
+  display: grid;
+  width: min(100%, 1180px);
+  gap: 1rem;
+  margin: 0 auto;
+}
+
+.how-hero,
+.how-card {
+  padding: clamp(1rem, 2.4vw, 1.6rem);
+}
+
+.how-hero h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 950;
+  line-height: 1.05;
+  text-shadow: 0 0 22px rgba(255, 102, 204, 0.36), 0 0 40px rgba(51, 255, 255, 0.18);
+}
+
+.how-hero p {
+  max-width: 68rem;
+  margin: 1rem 0 0;
+  color: rgba(238, 247, 255, 0.8);
+  font-size: clamp(1rem, 2vw, 1.16rem);
+  line-height: 1.85;
+}
+
+.how-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.how-card h2 {
+  margin: 0.35rem 0 1rem;
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  font-weight: 950;
+}
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.how-card ul {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.how-card li {
+  border-left: 3px solid rgba(51, 255, 255, 0.72);
+  color: rgba(238, 247, 255, 0.82);
+  line-height: 1.75;
+  padding-left: 0.85rem;
+}
+
 .neon-glow {
   text-shadow: 0 0 18px rgba(255, 102, 204, 0.4), 0 0 34px rgba(51, 255, 255, 0.18);
 }
@@ -764,8 +982,19 @@ a {
   }
 
   .home-feature-grid,
-  .score-guide {
+  .score-guide,
+  .how-grid {
     grid-template-columns: 1fr;
+  }
+
+  .leaderboard-line {
+    display: grid;
+    gap: 0.15rem;
+    justify-content: start;
+  }
+
+  .leaderboard-main p {
+    white-space: normal;
   }
 
   .game-board-shell {

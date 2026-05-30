@@ -7,6 +7,7 @@ import { STORAGE_KEYS } from '@/lib/gameConfig';
 import { loadHighScore, loadSettings, saveSettings, subscribeToLocalStorage } from '@/lib/storage';
 import type { GameSettings } from '@/types/game';
 import FeatureCards from './FeatureCards';
+import LeaderboardPanel from '@/components/game/LeaderboardPanel';
 
 const DEFAULT_SETTINGS: GameSettings = { mute: false };
 
@@ -56,6 +57,7 @@ export default function HomeHero() {
         </div>
       </section>
       <FeatureCards />
+      <LeaderboardPanel clearable />
     </main>
   );
 }

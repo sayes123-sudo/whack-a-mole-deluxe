@@ -46,6 +46,11 @@ export default function GameOverModal({
           <p className="text-neonCyan uppercase tracking-[0.3em] text-sm">{status === 'won' ? '恭喜達成' : '遊戲結束'}</p>
           <h3 className="text-4xl font-black neon-glow">{title}</h3>
           <p className="text-white/80">{message}</p>
+          {score > 0 ? (
+            <p className="rounded-2xl border border-cyan-200/20 bg-cyan-200/10 px-4 py-3 text-sm font-bold text-cyan-100">
+              這次分數已登錄到本機排行榜。
+            </p>
+          ) : null}
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
               <p className="text-xs uppercase text-white/70">當前分數</p>
