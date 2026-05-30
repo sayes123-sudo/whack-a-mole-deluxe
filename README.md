@@ -2,11 +2,14 @@
 
 正式版 cyberpunk arcade 打地鼠網頁遊戲，使用 Next.js App Router、TypeScript 與 Tailwind CSS v4 製作，可直接部署到 Vercel。
 
+正式網址：https://whack-a-mole-deluxe.vercel.app
+
 ## 功能
 
 - 首頁主選單、玩法頁、遊戲頁與一致風格的 404 頁
 - 4 個漸進關卡：3x3、3x4、4x4、4x5 動態格版
 - 地鼠、金地鼠、炸彈、時間加成、生命值、倒數、目標分數與 Combo
+- 分數圖鑑與即時格內分數標籤，清楚標示每種目標的加分、扣分與效果
 - 空點與炸彈會中斷 Combo，炸彈會扣命與扣分
 - 高分與音效設定儲存在 LocalStorage
 - Web Audio API 即時音效，不依賴外部音訊素材

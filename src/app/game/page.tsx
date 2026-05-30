@@ -7,6 +7,7 @@ import GameBoard from '@/components/game/GameBoard';
 import GameHud from '@/components/game/GameHud';
 import GameOverModal from '@/components/game/GameOverModal';
 import PauseOverlay from '@/components/game/PauseOverlay';
+import ScoreGuide from '@/components/game/ScoreGuide';
 import SettingsPanel from '@/components/game/SettingsPanel';
 import ArcadeButton from '@/components/ui/ArcadeButton';
 import { playBomb, playClick, playCombo, playGameOver, playLevelClear, playWarning } from '@/lib/sound';
@@ -65,15 +66,15 @@ export default function GamePage() {
   };
 
   return (
-    <main className="game-screen relative min-h-screen overflow-hidden bg-arcadeBg text-white">
+    <main className="game-screen relative min-h-screen overflow-hidden text-white">
       <div className="game-layout relative z-10 mx-auto grid w-full max-w-7xl gap-4 px-3 py-4 sm:px-5 lg:py-6">
-        <section className="rounded-3xl border border-cyan-200/15 bg-slate-950/80 p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-4">
-          <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <section className="game-arena">
+          <div className="game-topbar">
             <div>
-              <p className="text-xs uppercase tracking-[0.32em] text-neonCyan">地鼠大作戰 Deluxe</p>
-              <h1 className="mt-1 text-3xl font-black leading-tight neon-glow sm:text-4xl">LEVEL {engine.state.currentLevel} · {statusLabel}</h1>
+              <p className="game-kicker">地鼠大作戰 Deluxe</p>
+              <h1 className="game-title">LEVEL {engine.state.currentLevel} · {statusLabel}</h1>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="game-actions">
               {engine.state.status === 'playing' ? (
                 <ArcadeButton onClick={engine.pauseGame} className="min-w-0 px-5 py-3 text-sm">暫停</ArcadeButton>
               ) : engine.state.status === 'paused' ? (
@@ -81,15 +82,15 @@ export default function GamePage() {
               ) : (
                 <ArcadeButton onClick={() => engine.initLevel(1)} className="min-w-0 px-5 py-3 text-sm">開始</ArcadeButton>
               )}
-              <button onClick={engine.restartLevel} className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-black text-white transition hover:bg-white/20">
+              <button onClick={engine.restartLevel} className="game-plain-button">
                 重開
               </button>
-              <button onClick={() => setSettingsOpen(true)} className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-black text-white transition hover:bg-white/20">
+              <button onClick={() => setSettingsOpen(true)} className="game-plain-button">
                 設定
               </button>
             </div>
           </div>
-          <div className="mb-4 rounded-3xl border border-white/10 bg-slate-950/80 p-3">
+          <div className="game-hud-panel">
             <GameHud
               score={engine.state.score}
               highScore={engine.state.highScore}
@@ -104,22 +105,27 @@ export default function GamePage() {
         </section>
 
         <aside className="grid content-start gap-4">
-          <div className="rounded-3xl border border-white/10 bg-slate-950/85 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.3)] backdrop-blur-xl">
-            <p className="text-xs uppercase tracking-[0.28em] text-neonCyan">任務資訊</p>
-            <div className="mt-4 grid gap-3 text-sm text-white/75">
+          <div className="game-side-panel">
+            <p className="side-title">任務資訊</p>
+            <div className="side-list">
               <p>版面：{config.rows} x {config.columns}</p>
               <p>目標：{config.targetScore} 分</p>
               <p>倒數：{config.durationSeconds} 秒</p>
               <p>炸彈機率：{Math.round(config.bombChance * 100)}%</p>
             </div>
           </div>
-          <div className="rounded-3xl border border-white/10 bg-slate-950/85 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.3)] backdrop-blur-xl">
-            <p className="text-xs uppercase tracking-[0.28em] text-neonCyan">操作提示</p>
-            <p className="mt-3 text-sm leading-7 text-white/75">
-              點擊地鼠拿分，空點會中斷 Combo。炸彈扣一命和 30 分，金地鼠與時間獎勵是衝高分關鍵。
-            </p>
+          <div className="game-side-panel">
+            <p className="side-title">分數圖鑑</p>
+            <ScoreGuide compact />
           </div>
-          <Link href="/" className="rounded-2xl border border-white/10 bg-white/10 px-5 py-4 text-center text-sm font-black text-white transition hover:bg-white/20">
+          <div className="game-side-panel">
+            <p className="side-title">遊戲說明</p>
+            <p className="side-copy">
+              點擊加分目標、避開炸彈與空洞。達成目標分數即可過關；生命歸零或時間到未達標就失敗。
+            </p>
+            <p className="side-copy side-copy-strong">連續命中會累積 Combo，分數倍率會逐步提高。</p>
+          </div>
+          <Link href="/" className="game-menu-link">
             返回主選單
           </Link>
         </aside>
