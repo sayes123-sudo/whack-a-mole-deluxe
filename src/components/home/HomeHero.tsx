@@ -8,6 +8,7 @@ import { loadHighScore, loadSettings, saveSettings, subscribeToLocalStorage } fr
 import type { GameSettings } from '@/types/game';
 import FeatureCards from './FeatureCards';
 import LeaderboardPanel from '@/components/game/LeaderboardPanel';
+import PlayerNameForm from '@/components/game/PlayerNameForm';
 
 const DEFAULT_SETTINGS: GameSettings = { mute: false };
 
@@ -54,6 +55,7 @@ export default function HomeHero() {
             <span>最高分</span>
             <strong>{highScore}</strong>
           </div>
+          <PlayerNameForm />
         </div>
       </section>
       <FeatureCards />

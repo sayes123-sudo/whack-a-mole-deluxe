@@ -27,7 +27,7 @@ function LeaderboardRow({ entry, rank }: { entry: LeaderboardEntry; rank: number
           <strong>{entry.score}</strong>
           <span>{outcomeLabels[entry.outcome]}</span>
         </div>
-        <p>LEVEL {entry.level} · 剩餘 {entry.timeLeft}s · {formatDate(entry.createdAt)}</p>
+        <p>{entry.playerName} · LEVEL {entry.level} · 剩餘 {entry.timeLeft}s · {formatDate(entry.createdAt)}</p>
       </div>
     </li>
   );

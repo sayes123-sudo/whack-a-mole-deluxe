@@ -7,7 +7,9 @@ import GameBoard from '@/components/game/GameBoard';
 import GameHud from '@/components/game/GameHud';
 import GameOverModal from '@/components/game/GameOverModal';
 import LeaderboardPanel from '@/components/game/LeaderboardPanel';
+import LevelRoadmap from '@/components/game/LevelRoadmap';
 import PauseOverlay from '@/components/game/PauseOverlay';
+import PlayerNameForm from '@/components/game/PlayerNameForm';
 import ScoreGuide from '@/components/game/ScoreGuide';
 import SettingsPanel from '@/components/game/SettingsPanel';
 import { saveLeaderboardEntry } from '@/lib/leaderboard';
@@ -119,6 +121,7 @@ export default function GamePage() {
           <div className="game-playfield">
             <GameBoard rows={config.rows} columns={config.columns} cells={engine.cells} onHit={handleHit} />
           </div>
+          <LevelRoadmap currentLevel={engine.state.currentLevel} />
 
           <div className="game-details">
             <div className="game-hud-panel">
@@ -134,6 +137,9 @@ export default function GamePage() {
             </div>
 
             <aside className="game-info-grid">
+              <div className="game-side-panel">
+                <PlayerNameForm compact />
+              </div>
               <div className="game-side-panel">
                 <p className="side-title">任務資訊</p>
                 <div className="side-list">

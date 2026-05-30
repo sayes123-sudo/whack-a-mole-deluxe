@@ -33,6 +33,7 @@ export type LeaderboardOutcome = "won" | "lost" | "game-over";
 
 export interface LeaderboardEntry {
   id: string;
+  playerName: string;
   score: number;
   level: number;
   outcome: LeaderboardOutcome;

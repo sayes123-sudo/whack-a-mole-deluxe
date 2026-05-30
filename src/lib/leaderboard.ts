@@ -3,6 +3,8 @@ import { notifyLocalStorageChange } from '@/lib/storage';
 import type { LeaderboardEntry, LeaderboardOutcome } from '@/types/game';
 
 export const LEADERBOARD_LIMIT = 8;
+export const DEFAULT_PLAYER_NAME = '玩家';
+export const PLAYER_NAME_MAX_LENGTH = 14;
 
 export const outcomeLabels: Record<LeaderboardOutcome, string> = {
   won: '關卡達成',
@@ -23,6 +25,29 @@ const isEntry = (value: unknown): value is LeaderboardEntry => {
   );
 };
 
+export const sanitizePlayerName = (value: string): string => {
+  const normalized = value.replace(/\s+/g, ' ').trim();
+  if (!normalized) return DEFAULT_PLAYER_NAME;
+  return normalized.slice(0, PLAYER_NAME_MAX_LENGTH);
+};
+
+export const loadPlayerName = (): string => {
+  try {
+    return sanitizePlayerName(localStorage.getItem(STORAGE_KEYS.playerName) ?? DEFAULT_PLAYER_NAME);
+  } catch {
+    return DEFAULT_PLAYER_NAME;
+  }
+};
+
+export const savePlayerName = (name: string) => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.playerName, sanitizePlayerName(name));
+    notifyLocalStorageChange();
+  } catch {
+    // LocalStorage can be unavailable in privacy-restricted browsers.
+  }
+};
+
 export const sortLeaderboard = (entries: LeaderboardEntry[]): LeaderboardEntry[] =>
   [...entries]
     .sort((a, b) => {
@@ -39,16 +64,24 @@ export const loadLeaderboard = (): LeaderboardEntry[] => {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    return sortLeaderboard(parsed.filter(isEntry));
+    return sortLeaderboard(
+      parsed.filter(isEntry).map((entry) => ({
+        ...entry,
+        playerName: sanitizePlayerName(entry.playerName ?? DEFAULT_PLAYER_NAME),
+      })),
+    );
   } catch {
     return [];
   }
 };
 
-export const saveLeaderboardEntry = (entry: Omit<LeaderboardEntry, 'id' | 'createdAt'>): LeaderboardEntry | null => {
+export const saveLeaderboardEntry = (
+  entry: Omit<LeaderboardEntry, 'id' | 'createdAt' | 'playerName'> & { playerName?: string },
+): LeaderboardEntry | null => {
   try {
     const savedEntry: LeaderboardEntry = {
       ...entry,
+      playerName: sanitizePlayerName(entry.playerName || loadPlayerName()),
       id: `${Date.now()}-${Math.round(Math.random() * 100000)}`,
       createdAt: new Date().toISOString(),
     };
