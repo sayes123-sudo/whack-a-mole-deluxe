@@ -115,46 +115,52 @@ export default function GamePage() {
               </button>
             </div>
           </div>
-          <div className="game-hud-panel">
-            <GameHud
-              score={engine.state.score}
-              highScore={engine.state.highScore}
-              timeLeft={engine.state.timeLeft}
-              lives={engine.state.lives}
-              combo={engine.state.combo}
-              level={engine.state.currentLevel}
-              targetScore={config.targetScore}
-            />
-          </div>
-          <GameBoard rows={config.rows} columns={config.columns} cells={engine.cells} onHit={handleHit} />
-        </section>
 
-        <aside className="grid content-start gap-4">
-          <div className="game-side-panel">
-            <p className="side-title">任務資訊</p>
-            <div className="side-list">
-              <p>版面：{config.rows} x {config.columns}</p>
-              <p>目標：{config.targetScore} 分</p>
-              <p>倒數：{config.durationSeconds} 秒</p>
-              <p>炸彈機率：{Math.round(config.bombChance * 100)}%</p>
+          <div className="game-playfield">
+            <GameBoard rows={config.rows} columns={config.columns} cells={engine.cells} onHit={handleHit} />
+          </div>
+
+          <div className="game-details">
+            <div className="game-hud-panel">
+              <GameHud
+                score={engine.state.score}
+                highScore={engine.state.highScore}
+                timeLeft={engine.state.timeLeft}
+                lives={engine.state.lives}
+                combo={engine.state.combo}
+                level={engine.state.currentLevel}
+                targetScore={config.targetScore}
+              />
             </div>
+
+            <aside className="game-info-grid">
+              <div className="game-side-panel">
+                <p className="side-title">任務資訊</p>
+                <div className="side-list">
+                  <p>版面：{config.rows} x {config.columns}</p>
+                  <p>目標：{config.targetScore} 分</p>
+                  <p>倒數：{config.durationSeconds} 秒</p>
+                  <p>炸彈機率：{Math.round(config.bombChance * 100)}%</p>
+                </div>
+              </div>
+              <div className="game-side-panel">
+                <p className="side-title">分數圖鑑</p>
+                <ScoreGuide compact />
+              </div>
+              <LeaderboardPanel compact />
+              <div className="game-side-panel">
+                <p className="side-title">遊戲說明</p>
+                <p className="side-copy">
+                  點擊加分目標、避開炸彈與空洞。達成目標分數即可過關；生命歸零或時間到未達標就失敗。
+                </p>
+                <p className="side-copy side-copy-strong">連續命中會累積 Combo，分數倍率會逐步提高。</p>
+              </div>
+              <Link href="/" className="game-menu-link">
+                返回主選單
+              </Link>
+            </aside>
           </div>
-          <div className="game-side-panel">
-            <p className="side-title">分數圖鑑</p>
-            <ScoreGuide compact />
-          </div>
-          <LeaderboardPanel compact />
-          <div className="game-side-panel">
-            <p className="side-title">遊戲說明</p>
-            <p className="side-copy">
-              點擊加分目標、避開炸彈與空洞。達成目標分數即可過關；生命歸零或時間到未達標就失敗。
-            </p>
-            <p className="side-copy side-copy-strong">連續命中會累積 Combo，分數倍率會逐步提高。</p>
-          </div>
-          <Link href="/" className="game-menu-link">
-            返回主選單
-          </Link>
-        </aside>
+        </section>
       </div>
 
       {isPaused && <PauseOverlay onResume={engine.resumeGame} onRestart={engine.restartLevel} />}
