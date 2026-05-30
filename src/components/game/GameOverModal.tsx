@@ -4,6 +4,7 @@ interface Props {
   status: 'won' | 'lost' | 'game-over';
   score: number;
   targetScore: number;
+  timeLeft: number;
   currentLevel: number;
   isFinalLevel: boolean;
   onRestart: () => void;
@@ -15,6 +16,7 @@ export default function GameOverModal({
   status,
   score,
   targetScore,
+  timeLeft,
   currentLevel,
   isFinalLevel,
   onRestart,
@@ -51,14 +53,19 @@ export default function GameOverModal({
               這次分數已登錄到本機排行榜。
             </p>
           ) : null}
+          <div className="game-result-score">
+            <p>本局得分</p>
+            <strong>{score}</strong>
+            <span>LEVEL {currentLevel} · 剩餘 {timeLeft}s</span>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-              <p className="text-xs uppercase text-white/70">當前分數</p>
-              <p className="mt-2 text-3xl font-bold text-white">{score}</p>
-            </div>
             <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
               <p className="text-xs uppercase text-white/70">目標分數</p>
               <p className="mt-2 text-3xl font-bold text-white">{targetScore}</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+              <p className="text-xs uppercase text-white/70">完成率</p>
+              <p className="mt-2 text-3xl font-bold text-white">{Math.min(100, Math.round((score / targetScore) * 100))}%</p>
             </div>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row justify-center">

@@ -5,7 +5,7 @@ import { loadHighScore, loadSettings, saveHighScore, saveSettings, subscribeToLo
 import { makeAudioContext } from './sound';
 
 const DEFAULT_SETTINGS: GameSettings = { mute: false };
-const FEEDBACK_MS = 240;
+const FEEDBACK_MS = 420;
 
 const createCells = (config: LevelConfig): GameCellState[] =>
   Array.from({ length: config.rows * config.columns }, (_, id) => ({ id, entity: 'empty' }));
@@ -171,6 +171,24 @@ export function useGameEngine() {
     [clearIntervals],
   );
 
+  const selectLevel = useCallback(
+    (level: number) => {
+      const config = getLevelConfig(level);
+      clearIntervals();
+      setCells(createCells(config));
+      setState((previous) => ({
+        ...previous,
+        status: 'menu',
+        score: 0,
+        combo: 0,
+        lives: INITIAL_LIVES,
+        timeLeft: config.durationSeconds,
+        currentLevel: config.level,
+      }));
+    },
+    [clearIntervals],
+  );
+
   const initLevel = useCallback(
     (level = 1) => {
       beginLevel(level, 0);
@@ -283,6 +301,7 @@ export function useGameEngine() {
     cells,
     currentConfig,
     initLevel,
+    selectLevel,
     pauseGame,
     resumeGame,
     restartLevel,

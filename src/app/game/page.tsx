@@ -12,6 +12,7 @@ import PauseOverlay from '@/components/game/PauseOverlay';
 import PlayerNameForm from '@/components/game/PlayerNameForm';
 import ScoreGuide from '@/components/game/ScoreGuide';
 import SettingsPanel from '@/components/game/SettingsPanel';
+import { LEVELS } from '@/lib/gameConfig';
 import { saveLeaderboardEntry } from '@/lib/leaderboard';
 import ArcadeButton from '@/components/ui/ArcadeButton';
 import { playBomb, playClick, playCombo, playGameOver, playLevelClear, playWarning } from '@/lib/sound';
@@ -22,10 +23,9 @@ export default function GamePage() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const config = engine.currentConfig;
   const status = engine.state.status;
-  const { initLevel } = engine;
+  const { initLevel, selectLevel } = engine;
   const isPaused = engine.state.status === 'paused';
   const prevTimeRef = useRef(engine.state.timeLeft);
-  const hasStartedRef = useRef(false);
   const recordedResultRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -44,13 +44,6 @@ export default function GamePage() {
     }
     prevTimeRef.current = engine.state.timeLeft;
   }, [engine.state.timeLeft, engine.state.soundOn, engine.audioContextRef]);
-
-  useEffect(() => {
-    if (status === 'menu' && !hasStartedRef.current) {
-      hasStartedRef.current = true;
-      initLevel(1);
-    }
-  }, [status, initLevel]);
 
   useEffect(() => {
     if (status === 'playing') {
@@ -78,8 +71,10 @@ export default function GamePage() {
     if (engine.state.status === 'lost') return '遊戲結束';
     if (engine.state.status === 'paused') return '暫停中';
     if (engine.state.status === 'playing') return '戰鬥中';
-    return '準備就緒';
+    return '選擇關卡';
   }, [engine.state.status]);
+
+  const levelNames = ['入門', '進階', '高手', '專家'];
 
   const handleHit = (index: number) => {
     const cell = engine.cells[index];
@@ -107,7 +102,7 @@ export default function GamePage() {
               ) : engine.state.status === 'paused' ? (
                 <ArcadeButton onClick={engine.resumeGame} className="min-w-0 px-5 py-3 text-sm">繼續</ArcadeButton>
               ) : (
-                <ArcadeButton onClick={() => engine.initLevel(1)} className="min-w-0 px-5 py-3 text-sm">開始</ArcadeButton>
+                <ArcadeButton onClick={() => engine.initLevel(engine.state.currentLevel)} className="min-w-0 px-5 py-3 text-sm">開始</ArcadeButton>
               )}
               <button onClick={engine.restartLevel} className="game-plain-button">
                 重開
@@ -118,9 +113,36 @@ export default function GamePage() {
             </div>
           </div>
 
-          <div className="game-playfield">
-            <GameBoard rows={config.rows} columns={config.columns} cells={engine.cells} onHit={handleHit} />
-          </div>
+          {engine.state.status === 'menu' ? (
+            <section className="game-start-panel">
+              <div>
+                <p className="side-title">選擇關卡難易度</p>
+                <h2>先選想挑戰的關卡</h2>
+                <p>每一關的格數、目標分數、速度與炸彈機率都不同。選好後按開始，就會從該關正式倒數。</p>
+              </div>
+              <div className="level-select-grid">
+                {LEVELS.map((level, index) => (
+                  <button
+                    type="button"
+                    key={level.level}
+                    className={level.level === engine.state.currentLevel ? 'level-select-card level-select-card-active' : 'level-select-card'}
+                    onClick={() => selectLevel(level.level)}
+                  >
+                    <strong>LEVEL {level.level}</strong>
+                    <span>{levelNames[index]} · {level.rows} x {level.columns}</span>
+                    <small>目標 {level.targetScore} 分 · 炸彈 {Math.round(level.bombChance * 100)}%</small>
+                  </button>
+                ))}
+              </div>
+              <ArcadeButton onClick={() => initLevel(engine.state.currentLevel)} className="game-start-button">
+                開始 LEVEL {engine.state.currentLevel}
+              </ArcadeButton>
+            </section>
+          ) : (
+            <div className="game-playfield">
+              <GameBoard rows={config.rows} columns={config.columns} cells={engine.cells} onHit={handleHit} />
+            </div>
+          )}
           <LevelRoadmap currentLevel={engine.state.currentLevel} />
 
           <div className="game-details">
@@ -175,6 +197,7 @@ export default function GamePage() {
           status={engine.state.status === 'game-over' ? 'game-over' : engine.state.status}
           score={engine.state.score}
           targetScore={config.targetScore}
+          timeLeft={engine.state.timeLeft}
           currentLevel={engine.state.currentLevel}
           isFinalLevel={engine.isLastLevel}
           onRestart={engine.restartLevel}

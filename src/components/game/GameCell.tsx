@@ -60,6 +60,13 @@ export default function GameCell({ cell, onHit }: { cell: GameCellState; onHit: 
           {scoreLabel.text}
         </span>
       ) : null}
+      {cell.feedback === 'bomb' ? (
+        <>
+          <span className="bomb-flash" />
+          <span className="bomb-burst" />
+          <span className="bomb-smoke" />
+        </>
+      ) : null}
       {cell.feedback ? <span className={`feedback-ring feedback-${cell.feedback}`} /> : null}
     </button>
   );

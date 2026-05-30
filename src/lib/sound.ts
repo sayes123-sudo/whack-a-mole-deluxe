@@ -33,7 +33,37 @@ export function playClick(ac: AudioContext | null) {
 }
 
 export function playBomb(ac: AudioContext | null) {
-  playBeep(ac, 120, 0.18, 0.16);
+  if (!ac) return;
+  if (ac.state === 'suspended') {
+    void ac.resume();
+  }
+
+  const duration = 0.34;
+  const noiseBuffer = ac.createBuffer(1, ac.sampleRate * duration, ac.sampleRate);
+  const channel = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < channel.length; i += 1) {
+    const fade = 1 - i / channel.length;
+    channel[i] = (Math.random() * 2 - 1) * fade;
+  }
+
+  const noise = ac.createBufferSource();
+  const filter = ac.createBiquadFilter();
+  const noiseGain = ac.createGain();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(900, ac.currentTime);
+  filter.frequency.exponentialRampToValueAtTime(120, ac.currentTime + duration);
+  noiseGain.gain.setValueAtTime(0.001, ac.currentTime);
+  noiseGain.gain.exponentialRampToValueAtTime(0.28, ac.currentTime + 0.025);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + duration);
+  noise.buffer = noiseBuffer;
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(ac.destination);
+  noise.start();
+  noise.stop(ac.currentTime + duration);
+
+  playBeep(ac, 95, 0.22, 0.18);
+  setTimeout(() => playBeep(ac, 58, 0.18, 0.12), 70);
 }
 
 export function playCombo(ac: AudioContext | null) {

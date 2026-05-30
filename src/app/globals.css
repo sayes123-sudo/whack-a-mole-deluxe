@@ -666,6 +666,86 @@ a {
   margin: 0.75rem auto 1.05rem;
 }
 
+.game-start-panel {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgba(190, 232, 255, 0.22);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(145deg, rgba(20, 39, 68, 0.82), rgba(37, 22, 72, 0.78)),
+    radial-gradient(circle at 88% 10%, rgba(255, 200, 87, 0.14), transparent 32%);
+  margin: 0.75rem auto 1rem;
+  padding: clamp(1rem, 2.4vw, 1.35rem);
+}
+
+.game-start-panel h2,
+.game-start-panel p {
+  margin: 0;
+}
+
+.game-start-panel h2 {
+  margin-top: 0.35rem;
+  color: white;
+  font-size: clamp(1.45rem, 3vw, 2.2rem);
+  font-weight: 950;
+}
+
+.game-start-panel p:not(.side-title) {
+  max-width: 54rem;
+  color: rgba(238, 247, 255, 0.76);
+  line-height: 1.75;
+}
+
+.level-select-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.level-select-card {
+  display: grid;
+  gap: 0.28rem;
+  min-height: 6.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
+    radial-gradient(circle at top right, rgba(51, 255, 255, 0.08), transparent 38%);
+  color: white;
+  padding: 0.9rem;
+  text-align: left;
+}
+
+.level-select-card strong {
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.level-select-card span {
+  color: #9ffaff;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.level-select-card small {
+  color: rgba(238, 247, 255, 0.7);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.level-select-card-active {
+  border-color: rgba(255, 200, 87, 0.72);
+  background:
+    linear-gradient(145deg, rgba(255, 200, 87, 0.22), rgba(255, 102, 204, 0.12)),
+    radial-gradient(circle at top right, rgba(51, 255, 255, 0.16), transparent 38%);
+  box-shadow: inset 0 0 26px rgba(255, 200, 87, 0.16), 0 16px 42px rgba(4, 10, 22, 0.24);
+}
+
+.game-start-button {
+  width: min(100%, 22rem);
+}
+
 .level-roadmap {
   display: grid;
   gap: 0.75rem;
@@ -1029,7 +1109,8 @@ a {
 }
 
 .cell-bomb {
-  animation: cell-shake 220ms ease-out both;
+  animation: cell-shake 420ms ease-out both;
+  box-shadow: 0 0 34px rgba(255, 88, 88, 0.35), inset 0 0 28px rgba(255, 88, 88, 0.24);
 }
 
 .cell-bonus {
@@ -1038,6 +1119,66 @@ a {
 
 .cell-miss {
   opacity: 0.68;
+}
+
+.bomb-flash,
+.bomb-burst,
+.bomb-smoke {
+  position: absolute;
+  pointer-events: none;
+}
+
+.bomb-flash {
+  inset: 0;
+  z-index: 24;
+  background: radial-gradient(circle at 50% 48%, rgba(255, 244, 184, 0.95), rgba(255, 118, 42, 0.62) 28%, transparent 58%);
+  mix-blend-mode: screen;
+  animation: bomb-flash 420ms ease-out both;
+}
+
+.bomb-burst {
+  inset: 18%;
+  z-index: 25;
+  border-radius: 999px;
+  background:
+    conic-gradient(from 14deg, transparent 0 9deg, rgba(255, 226, 96, 0.95) 9deg 17deg, transparent 17deg 36deg, rgba(255, 82, 82, 0.92) 36deg 48deg, transparent 48deg 72deg, rgba(255, 226, 96, 0.95) 72deg 82deg, transparent 82deg 114deg, rgba(255, 82, 82, 0.92) 114deg 128deg, transparent 128deg 360deg),
+    radial-gradient(circle, #fff2a8 0 15%, #ff8f2c 16% 36%, rgba(255, 69, 58, 0.18) 37% 58%, transparent 59%);
+  filter: drop-shadow(0 0 18px rgba(255, 112, 48, 0.8));
+  animation: bomb-burst 420ms ease-out both;
+}
+
+.bomb-smoke {
+  inset: 10%;
+  z-index: 23;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(68, 58, 70, 0.75), rgba(20, 18, 26, 0.38) 44%, transparent 68%);
+  filter: blur(6px);
+  animation: bomb-smoke 560ms ease-out both;
+}
+
+.game-result-score {
+  display: grid;
+  gap: 0.25rem;
+  border: 1px solid rgba(255, 200, 87, 0.32);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(255, 200, 87, 0.18), rgba(255, 102, 204, 0.12)),
+    radial-gradient(circle at top right, rgba(51, 255, 255, 0.12), transparent 38%);
+  padding: 1rem;
+}
+
+.game-result-score p,
+.game-result-score span {
+  margin: 0;
+  color: rgba(238, 247, 255, 0.74);
+  font-weight: 900;
+}
+
+.game-result-score strong {
+  color: #ffd76e;
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-weight: 950;
+  line-height: 1;
 }
 
 @keyframes sprite-pop {
@@ -1066,6 +1207,48 @@ a {
   to {
     transform: scale(1.25);
     opacity: 0;
+  }
+}
+
+@keyframes bomb-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes bomb-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) rotate(0deg);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55) rotate(22deg);
+  }
+}
+
+@keyframes bomb-smoke {
+  0% {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+  35% {
+    opacity: 0.82;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45) translateY(-6%);
   }
 }
 
@@ -1115,7 +1298,8 @@ a {
 
   .home-feature-grid,
   .score-guide,
-  .how-grid {
+  .how-grid,
+  .level-select-grid {
     grid-template-columns: 1fr;
   }
 
