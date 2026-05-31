@@ -13,7 +13,12 @@ export function makeAudioContext() {
 export function playBeep(ac: AudioContext | null, freq = 440, duration = 0.08, gain = 0.12) {
   if (!ac) return;
   if (ac.state === 'suspended') {
-    void ac.resume();
+    void ac.resume().then(() => {
+      if (ac.state === 'running') {
+        playBeep(ac, freq, duration, gain);
+      }
+    });
+    return;
   }
   const o = ac.createOscillator();
   const g = ac.createGain();
@@ -35,7 +40,12 @@ export function playClick(ac: AudioContext | null) {
 export function playBomb(ac: AudioContext | null) {
   if (!ac) return;
   if (ac.state === 'suspended') {
-    void ac.resume();
+    void ac.resume().then(() => {
+      if (ac.state === 'running') {
+        playBomb(ac);
+      }
+    });
+    return;
   }
 
   const duration = 0.34;

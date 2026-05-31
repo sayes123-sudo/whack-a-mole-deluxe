@@ -101,13 +101,11 @@ export default function GamePage() {
   }, [engine.isLastLevel, engine.state.currentLevel, initLevel, nextLevel, status]);
 
   const handleHit = (index: number) => {
-    const cell = engine.cells[index];
-    if (!cell) return;
-    engine.hitCell(index);
+    const entity = engine.hitCell(index);
     if (engine.state.soundOn) {
-      if (cell.entity === 'bomb') playBomb(engine.audioContextRef.current);
-      else if (cell.entity === 'mole' || cell.entity === 'golden-mole') playClick(engine.audioContextRef.current);
-      else if (cell.entity === 'time-bonus') playCombo(engine.audioContextRef.current);
+      if (entity === 'bomb') playBomb(engine.audioContextRef.current);
+      else if (entity === 'mole' || entity === 'golden-mole') playClick(engine.audioContextRef.current);
+      else if (entity === 'time-bonus') playCombo(engine.audioContextRef.current);
     }
   };
 

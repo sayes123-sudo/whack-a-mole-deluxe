@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { INITIAL_LIVES, LEVELS, STORAGE_KEYS } from './gameConfig';
-import type { GameCellFeedback, GameCellState, GameEntity, GameSettings, GameState, LevelConfig } from '@/types/game';
+import type { GameCellFeedback, GameCellState, GameEntity, GameHitResult, GameSettings, GameState, LevelConfig } from '@/types/game';
 import { loadHighScore, loadSettings, saveHighScore, saveSettings, subscribeToLocalStorage } from './storage';
 import { makeAudioContext } from './sound';
 
@@ -89,6 +89,14 @@ export function useGameEngine() {
 
   const currentConfig = useMemo(() => getLevelConfig(state.currentLevel), [state.currentLevel]);
 
+  const unlockAudio = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    audioContextRef.current ??= makeAudioContext();
+    if (audioContextRef.current?.state === 'suspended') {
+      void audioContextRef.current.resume();
+    }
+  }, []);
+
   const markFeedback = useCallback((index: number, feedback: GameCellFeedback, feedbackEntity: GameEntity = 'empty') => {
     setCells((current) => {
       const next = current.slice();
@@ -157,6 +165,7 @@ export function useGameEngine() {
   const beginLevel = useCallback(
     (level: number, score: number) => {
       const config = getLevelConfig(level);
+      unlockAudio();
       clearIntervals();
       setCells(createCells(config));
       setState((previous) => ({
@@ -169,7 +178,7 @@ export function useGameEngine() {
         currentLevel: config.level,
       }));
     },
-    [clearIntervals],
+    [clearIntervals, unlockAudio],
   );
 
   const selectLevel = useCallback(
@@ -229,16 +238,17 @@ export function useGameEngine() {
   }, [settings.mute]);
 
   const hitCell = useCallback(
-    (index: number) => {
-      if (stateRef.current.status !== 'playing') return;
+    (index: number): GameHitResult => {
+      unlockAudio();
+      if (stateRef.current.status !== 'playing') return null;
 
       const cell = cellsRef.current[index];
-      if (!cell) return;
+      if (!cell) return null;
 
       if (cell.entity === 'empty') {
         markFeedback(index, 'miss');
         setState((previous) => ({ ...previous, combo: 0 }));
-        return;
+        return 'empty';
       }
 
       const entity = cell.entity;
@@ -281,8 +291,10 @@ export function useGameEngine() {
 
         return { ...previous, score, combo, lives, timeLeft, status, highScore };
       });
+
+      return entity;
     },
-    [markFeedback, storedHighScore],
+    [markFeedback, storedHighScore, unlockAudio],
   );
 
   const derivedState = useMemo<GameState>(

@@ -4,6 +4,8 @@ export type Difficulty = "easy" | "normal" | "hard" | "expert";
 
 export type GameCellFeedback = "hit" | "bonus" | "bomb" | "miss";
 
+export type GameHitResult = GameEntity | null;
+
 export interface LevelConfig {
   level: number;
   rows: number;

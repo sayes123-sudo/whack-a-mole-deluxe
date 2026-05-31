@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import type { KeyboardEvent, PointerEvent } from 'react';
 import type { GameCellState, GameEntity } from '@/types/game';
 
 const entityLabels: Record<GameEntity, string> = {
@@ -35,10 +36,23 @@ export default function GameCell({ cell, onHit }: { cell: GameCellState; onHit: 
   const scoreLabel = isActive ? entityScoreLabels[cell.entity] : null;
   const label = isActive ? entityLabels[cell.entity] : cell.feedback === 'miss' ? '揮空' : '空洞';
 
+  const handlePointerDown = (event: PointerEvent<HTMLButtonElement>) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    onHit(cell.id);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    onHit(cell.id);
+  };
+
   return (
     <button
       type="button"
-      onClick={() => onHit(cell.id)}
+      onPointerDown={handlePointerDown}
+      onKeyDown={handleKeyDown}
       aria-label={label}
       className={[
         'game-cell group relative aspect-square w-full overflow-hidden rounded-2xl border transition focus:outline-none focus:ring-2 focus:ring-cyan-200 sm:rounded-3xl',
