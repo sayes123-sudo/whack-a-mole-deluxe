@@ -23,7 +23,7 @@ export default function GamePage() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const config = engine.currentConfig;
   const status = engine.state.status;
-  const { initLevel, selectLevel } = engine;
+  const { initLevel, nextLevel, selectLevel } = engine;
   const isPaused = engine.state.status === 'paused';
   const prevTimeRef = useRef(engine.state.timeLeft);
   const recordedResultRef = useRef<string | null>(null);
@@ -76,6 +76,30 @@ export default function GamePage() {
 
   const levelLabels = ['初階', '中階', '高階', '專家'];
 
+  const primaryAction = useMemo(() => {
+    if (status === 'won') {
+      return {
+        label: engine.isLastLevel ? '完成' : '下一關',
+        disabled: engine.isLastLevel,
+        onClick: engine.isLastLevel ? undefined : nextLevel,
+      };
+    }
+
+    if (status === 'lost' || status === 'game-over') {
+      return {
+        label: '重新開始',
+        disabled: false,
+        onClick: () => initLevel(status === 'game-over' ? 1 : engine.state.currentLevel),
+      };
+    }
+
+    return {
+      label: '開始',
+      disabled: status === 'playing' || status === 'paused',
+      onClick: () => initLevel(engine.state.currentLevel),
+    };
+  }, [engine.isLastLevel, engine.state.currentLevel, initLevel, nextLevel, status]);
+
   const handleHit = (index: number) => {
     const cell = engine.cells[index];
     if (!cell) return;
@@ -114,11 +138,11 @@ export default function GamePage() {
             </div>
             <div className="game-start-score">
               <ArcadeButton
-                onClick={() => initLevel(engine.state.currentLevel)}
+                onClick={primaryAction.onClick}
                 className="game-start-button"
-                disabled={engine.state.status === 'playing'}
+                disabled={primaryAction.disabled}
               >
-                開始
+                {primaryAction.label}
               </ArcadeButton>
               <div className="top-score-card">
                 <span>目前分數</span>
