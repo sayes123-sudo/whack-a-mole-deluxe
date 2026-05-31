@@ -74,6 +74,8 @@ export default function GamePage() {
     return '選擇關卡';
   }, [engine.state.status]);
 
+  const levelLabels = ['初階', '中階', '高階', '專家'];
+
   const handleHit = (index: number) => {
     const cell = engine.cells[index];
     if (!cell) return;
@@ -106,19 +108,23 @@ export default function GamePage() {
                   className={level.level === engine.state.currentLevel ? 'level-tab level-tab-active' : 'level-tab'}
                   onClick={() => selectLevel(level.level)}
                 >
-                  LEVEL {level.level}
+                  {levelLabels[level.level - 1]}
                 </button>
               ))}
             </div>
-            {engine.state.status === 'playing' ? (
-              <ArcadeButton onClick={engine.pauseGame} className="game-start-button">暫停</ArcadeButton>
-            ) : engine.state.status === 'paused' ? (
-              <ArcadeButton onClick={engine.resumeGame} className="game-start-button">繼續</ArcadeButton>
-            ) : (
-              <ArcadeButton onClick={() => initLevel(engine.state.currentLevel)} className="game-start-button">
+            <div className="game-start-score">
+              <ArcadeButton
+                onClick={() => initLevel(engine.state.currentLevel)}
+                className="game-start-button"
+                disabled={engine.state.status === 'playing'}
+              >
                 開始
               </ArcadeButton>
-            )}
+              <div className="top-score-card">
+                <span>目前分數</span>
+                <strong>{engine.state.score}</strong>
+              </div>
+            </div>
           </div>
 
           <div className="game-playfield">
@@ -149,6 +155,15 @@ export default function GamePage() {
                   <button type="button" onClick={engine.restartLevel} className="game-plain-button">
                     重開本關
                   </button>
+                  {engine.state.status === 'playing' ? (
+                    <button type="button" onClick={engine.pauseGame} className="game-plain-button">
+                      暫停
+                    </button>
+                  ) : engine.state.status === 'paused' ? (
+                    <button type="button" onClick={engine.resumeGame} className="game-plain-button">
+                      繼續
+                    </button>
+                  ) : null}
                   <button type="button" onClick={() => setSettingsOpen(true)} className="game-plain-button">
                     設定
                   </button>

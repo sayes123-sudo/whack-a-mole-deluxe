@@ -640,7 +640,7 @@ a {
 
 .game-secondary-actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
   gap: 0.55rem;
   margin-top: 0.85rem;
 }
@@ -705,6 +705,38 @@ a {
 
 .game-start-button {
   width: 100%;
+}
+
+.game-start-score {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(6.75rem, 0.45fr);
+  gap: 0.55rem;
+  align-items: stretch;
+}
+
+.top-score-card {
+  display: grid;
+  min-height: 3.25rem;
+  align-content: center;
+  border: 1px solid rgba(255, 200, 87, 0.3);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(255, 200, 87, 0.16), rgba(255, 102, 204, 0.1)),
+    radial-gradient(circle at top right, rgba(51, 255, 255, 0.12), transparent 40%);
+  padding: 0.55rem 0.75rem;
+}
+
+.top-score-card span {
+  color: rgba(238, 247, 255, 0.68);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.top-score-card strong {
+  color: #ffd76e;
+  font-size: 1.35rem;
+  font-weight: 950;
+  line-height: 1;
 }
 
 .level-roadmap {
