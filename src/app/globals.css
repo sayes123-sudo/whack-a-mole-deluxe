@@ -619,12 +619,6 @@ a {
   text-shadow: 0 0 22px rgba(255, 102, 204, 0.36), 0 0 40px rgba(51, 255, 255, 0.18);
 }
 
-.game-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-}
-
 .game-plain-button,
 .game-menu-link {
   display: inline-flex;
@@ -642,6 +636,13 @@ a {
 
 .game-plain-button {
   padding: 0.75rem 1rem;
+}
+
+.game-secondary-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 0.85rem;
 }
 
 .game-menu-link {
@@ -666,84 +667,44 @@ a {
   margin: 0.75rem auto 1.05rem;
 }
 
-.game-start-panel {
+.game-control-strip {
   display: grid;
-  gap: 1rem;
-  border: 1px solid rgba(190, 232, 255, 0.22);
-  border-radius: 1.25rem;
-  background:
-    linear-gradient(145deg, rgba(20, 39, 68, 0.82), rgba(37, 22, 72, 0.78)),
-    radial-gradient(circle at 88% 10%, rgba(255, 200, 87, 0.14), transparent 32%);
-  margin: 0.75rem auto 1rem;
-  padding: clamp(1rem, 2.4vw, 1.35rem);
+  gap: 0.7rem;
+  margin: 0.85rem 0 0.75rem;
 }
 
-.game-start-panel h2,
-.game-start-panel p {
-  margin: 0;
-}
-
-.game-start-panel h2 {
-  margin-top: 0.35rem;
-  color: white;
-  font-size: clamp(1.45rem, 3vw, 2.2rem);
-  font-weight: 950;
-}
-
-.game-start-panel p:not(.side-title) {
-  max-width: 54rem;
-  color: rgba(238, 247, 255, 0.76);
-  line-height: 1.75;
-}
-
-.level-select-grid {
+.level-tabs {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
 }
 
-.level-select-card {
-  display: grid;
-  gap: 0.28rem;
-  min-height: 6.5rem;
+.level-tab {
+  min-height: 2.7rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 1rem;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
-    radial-gradient(circle at top right, rgba(51, 255, 255, 0.08), transparent 38%);
-  color: white;
-  padding: 0.9rem;
-  text-align: left;
-}
-
-.level-select-card strong {
-  color: white;
-  font-size: 1.05rem;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(238, 247, 255, 0.78);
+  font-size: clamp(0.72rem, 2.5vw, 0.9rem);
   font-weight: 950;
 }
 
-.level-select-card span {
-  color: #9ffaff;
-  font-size: 0.9rem;
-  font-weight: 900;
+.level-tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
 }
 
-.level-select-card small {
-  color: rgba(238, 247, 255, 0.7);
-  font-size: 0.78rem;
-  line-height: 1.45;
-}
-
-.level-select-card-active {
-  border-color: rgba(255, 200, 87, 0.72);
+.level-tab-active {
+  border-color: rgba(255, 200, 87, 0.68);
   background:
-    linear-gradient(145deg, rgba(255, 200, 87, 0.22), rgba(255, 102, 204, 0.12)),
+    linear-gradient(135deg, rgba(255, 200, 87, 0.26), rgba(255, 102, 204, 0.14)),
     radial-gradient(circle at top right, rgba(51, 255, 255, 0.16), transparent 38%);
-  box-shadow: inset 0 0 26px rgba(255, 200, 87, 0.16), 0 16px 42px rgba(4, 10, 22, 0.24);
+  color: #ffd76e;
+  box-shadow: inset 0 0 22px rgba(255, 200, 87, 0.12);
 }
 
 .game-start-button {
-  width: min(100%, 22rem);
+  width: 100%;
 }
 
 .level-roadmap {
@@ -1298,8 +1259,7 @@ a {
 
   .home-feature-grid,
   .score-guide,
-  .how-grid,
-  .level-select-grid {
+  .how-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1339,6 +1299,11 @@ a {
 
   .level-roadmap-list {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .game-control-strip {
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 14rem);
+    align-items: center;
   }
 }
 

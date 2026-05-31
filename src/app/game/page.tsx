@@ -74,8 +74,6 @@ export default function GamePage() {
     return '選擇關卡';
   }, [engine.state.status]);
 
-  const levelNames = ['入門', '進階', '高手', '專家'];
-
   const handleHit = (index: number) => {
     const cell = engine.cells[index];
     if (!cell) return;
@@ -96,53 +94,36 @@ export default function GamePage() {
               <p className="game-kicker">地鼠大作戰 Deluxe</p>
               <h1 className="game-title">LEVEL {engine.state.currentLevel} · {statusLabel}</h1>
             </div>
-            <div className="game-actions">
-              {engine.state.status === 'playing' ? (
-                <ArcadeButton onClick={engine.pauseGame} className="min-w-0 px-5 py-3 text-sm">暫停</ArcadeButton>
-              ) : engine.state.status === 'paused' ? (
-                <ArcadeButton onClick={engine.resumeGame} className="min-w-0 px-5 py-3 text-sm">繼續</ArcadeButton>
-              ) : (
-                <ArcadeButton onClick={() => engine.initLevel(engine.state.currentLevel)} className="min-w-0 px-5 py-3 text-sm">開始</ArcadeButton>
-              )}
-              <button onClick={engine.restartLevel} className="game-plain-button">
-                重開
-              </button>
-              <button onClick={() => setSettingsOpen(true)} className="game-plain-button">
-                設定
-              </button>
-            </div>
           </div>
 
-          {engine.state.status === 'menu' ? (
-            <section className="game-start-panel">
-              <div>
-                <p className="side-title">選擇關卡難易度</p>
-                <h2>先選想挑戰的關卡</h2>
-                <p>每一關的格數、目標分數、速度與炸彈機率都不同。選好後按開始，就會從該關正式倒數。</p>
-              </div>
-              <div className="level-select-grid">
-                {LEVELS.map((level, index) => (
-                  <button
-                    type="button"
-                    key={level.level}
-                    className={level.level === engine.state.currentLevel ? 'level-select-card level-select-card-active' : 'level-select-card'}
-                    onClick={() => selectLevel(level.level)}
-                  >
-                    <strong>LEVEL {level.level}</strong>
-                    <span>{levelNames[index]} · {level.rows} x {level.columns}</span>
-                    <small>目標 {level.targetScore} 分 · 炸彈 {Math.round(level.bombChance * 100)}%</small>
-                  </button>
-                ))}
-              </div>
-              <ArcadeButton onClick={() => initLevel(engine.state.currentLevel)} className="game-start-button">
-                開始 LEVEL {engine.state.currentLevel}
-              </ArcadeButton>
-            </section>
-          ) : (
-            <div className="game-playfield">
-              <GameBoard rows={config.rows} columns={config.columns} cells={engine.cells} onHit={handleHit} />
+          <div className="game-control-strip">
+            <div className="level-tabs" aria-label="選擇關卡難易度">
+              {LEVELS.map((level) => (
+                <button
+                  type="button"
+                  key={level.level}
+                  disabled={engine.state.status === 'playing' || engine.state.status === 'paused'}
+                  className={level.level === engine.state.currentLevel ? 'level-tab level-tab-active' : 'level-tab'}
+                  onClick={() => selectLevel(level.level)}
+                >
+                  LEVEL {level.level}
+                </button>
+              ))}
             </div>
-          )}
+            {engine.state.status === 'playing' ? (
+              <ArcadeButton onClick={engine.pauseGame} className="game-start-button">暫停</ArcadeButton>
+            ) : engine.state.status === 'paused' ? (
+              <ArcadeButton onClick={engine.resumeGame} className="game-start-button">繼續</ArcadeButton>
+            ) : (
+              <ArcadeButton onClick={() => initLevel(engine.state.currentLevel)} className="game-start-button">
+                開始
+              </ArcadeButton>
+            )}
+          </div>
+
+          <div className="game-playfield">
+            <GameBoard rows={config.rows} columns={config.columns} cells={engine.cells} onHit={handleHit} />
+          </div>
           <LevelRoadmap currentLevel={engine.state.currentLevel} />
 
           <div className="game-details">
@@ -161,6 +142,17 @@ export default function GamePage() {
             <aside className="game-info-grid">
               <div className="game-side-panel">
                 <PlayerNameForm compact />
+              </div>
+              <div className="game-side-panel">
+                <p className="side-title">遊戲控制</p>
+                <div className="game-secondary-actions">
+                  <button type="button" onClick={engine.restartLevel} className="game-plain-button">
+                    重開本關
+                  </button>
+                  <button type="button" onClick={() => setSettingsOpen(true)} className="game-plain-button">
+                    設定
+                  </button>
+                </div>
               </div>
               <div className="game-side-panel">
                 <p className="side-title">任務資訊</p>

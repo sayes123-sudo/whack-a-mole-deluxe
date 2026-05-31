@@ -41,18 +41,19 @@ export function useGameEngine() {
   const storedHighScore = Number(useSyncExternalStore(subscribeToLocalStorage, highScoreSnapshot, () => '0'));
   const settings = JSON.parse(useSyncExternalStore(subscribeToLocalStorage, settingsSnapshot, () => JSON.stringify(DEFAULT_SETTINGS))) as GameSettings;
   const [state, setState] = useState<GameState>(() => {
+    const initialConfig = getLevelConfig(1);
     return {
       status: 'menu',
       score: 0,
       highScore: 0,
       combo: 0,
       lives: INITIAL_LIVES,
-      timeLeft: 0,
-      currentLevel: 1,
+      timeLeft: initialConfig.durationSeconds,
+      currentLevel: initialConfig.level,
       soundOn: true,
     };
   });
-  const [cells, setCells] = useState<GameCellState[]>([]);
+  const [cells, setCells] = useState<GameCellState[]>(() => createCells(getLevelConfig(1)));
   const tickRef = useRef<number | null>(null);
   const spawnRef = useRef<number | null>(null);
   const stateRef = useRef<GameState>(state);
